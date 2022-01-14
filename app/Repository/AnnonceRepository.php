@@ -5,18 +5,18 @@ namespace App\Repository;
 use App\Helpers\Helper;
 use App\Models\Annonce;
 use App\Models\Image;
-use App\Services\FilterAnnoncesService;
+use App\Services\AnnonceServices;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AnnonceRepository implements RepositoryInterface
 {
     protected $annonce;
-    protected $filterAnnoncesService;
-    public function __construct(Annonce $annonce, FilterAnnoncesService $filterAnnoncesService)
+    protected $annonceServices;
+    public function __construct(Annonce $annonce, AnnonceServices $annonceServices)
     {
-        $this->annonce               = $annonce;
-        $this->filterAnnoncesService = $filterAnnoncesService;
+        $this->annonce         = $annonce;
+        $this->annonceServices = $annonceServices;
     }
 
     public function getAll()
@@ -29,9 +29,9 @@ class AnnonceRepository implements RepositoryInterface
     {
         $query = $this->annonce->with('transaction', 'type_de_bien', 'etat', 'ville', 'images', 'c_generales', 'c_interieurs', 'c_supplementaires');
         if(isset($data['is_user']) and $data['is_user'] == 1){
-            $query = $this->filterAnnoncesService->FilterAnnoncesByUser($query, $data);
+            $query = $this->annonceServices->FilterAnnoncesByUser($query, $data);
         }else{
-            $query = $this->filterAnnoncesService->FilterAnnoncesByVisiteur($query, $data);
+            $query = $this->annonceServices->FilterAnnoncesByVisiteur($query, $data);
         }
         return $query->orderBy('id', 'desc')->paginate(Helper::pagination);
     }
@@ -68,19 +68,10 @@ class AnnonceRepository implements RepositoryInterface
 
         // Images
         foreach($data['images'] as $image){
-            if(isset($image) && $image->isValid()){
-                $new_image  = new Image();
-                $image      = $image;
-                $imageName  = time() . Str::random(5) . '.' . $image->getClientOriginalExtension();
-                if(!file_exists('images/annonces/')){
-                    mkdir('images/annonces/');
-                }
-                $destinationPath = public_path('images/annonces/');
-                $image->move($destinationPath,$imageName);
-                $new_image->image      = $imageName;
-                $new_image->id_annonce = $annonce->id;
-                $new_image->save();
-            }
+            $new_image  = new Image();
+            $new_image->image      = Helper::saveFile($image, "annonces");
+            $new_image->id_annonce = $annonce->id;
+            $new_image->save();
         }
 
         // Caractéristique génerales
@@ -121,24 +112,16 @@ class AnnonceRepository implements RepositoryInterface
         $annonce->lien_video        = $data['lien_video'];
         $annonce->titre             = $data['titre'];
         $annonce->description       = $data['description'];
-        $annonce->update();
+        // $annonce->update();
 
         // Images
-        if(isset($data['images']) and count($data['images']) > 0 ) $annonce->images()->delete();
+        if(isset($data['images']) and count($data['images']) > 0 ) //$annonce->images()->delete();
+        $this->annonceServices->deleteAllImages($id, $annonce->images());
         foreach($data['images'] as $image){
-            if(isset($image) && $image->isValid()){
-                $new_image  = new Image();
-                $image      = $image;
-                $imageName  = time() . Str::random(5) . '.' . $image->getClientOriginalExtension();
-                if(!file_exists('images/annonces/')){
-                    mkdir('images/annonces/');
-                }
-                $destinationPath = public_path('images/annonces/');
-                $image->move($destinationPath,$imageName);
-                $new_image->image      = $imageName;
-                $new_image->id_annonce = $annonce->id;
-                $new_image->save();
-            }
+            $new_image  = new Image();
+            $new_image->image      = Helper::saveFile($image, "annonces");
+            $new_image->id_annonce = $annonce->id;
+            $new_image->save();
         }
 
         // Caractéristique génerales

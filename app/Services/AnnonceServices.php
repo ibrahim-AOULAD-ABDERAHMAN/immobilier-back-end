@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Services;
+use App\Models\Image;
+use Illuminate\Support\Facades\File;
 
-class FilterAnnoncesService
+class AnnonceServices
 {
     public function FilterAnnoncesByVisiteur($query, $data)
     {
@@ -58,4 +60,14 @@ class FilterAnnoncesService
         }
         return $query;
     }
+
+    public function deleteAllImages($id_annonce, $list_images)
+    {
+        $list_images->delete();
+        $images = Image::where('id_annonce', $id_annonce)->get();
+        foreach($images as $image){
+            File::delete(public_path("images/annonces/".$image->image));
+        }
+    }
+
 }

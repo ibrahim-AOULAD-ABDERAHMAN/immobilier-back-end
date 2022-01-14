@@ -66,7 +66,7 @@ class AnnonceRequest extends BaseRequest
             'titre'                     => ['bail', 'required', 'string', 'max:75'],
             'description'               => ['bail', 'nullable', 'string', 'max:10000'],
             'images'                    => ['bail', 'required', 'array'],
-            'images.*'                  => ['mimes:jpg, jpeg, png'],
+            'images.*'                  => ['mimes:jpg,jpeg,png'],
             'c_generales_ids'           => ['bail', 'nullable', 'array'],
             'c_generales_ids.*'         => ['bail', 'integer', 'exists:c_generales,id'],
             'c_interieurs_ids'          => ['bail', 'nullable', 'array'],

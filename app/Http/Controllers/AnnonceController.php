@@ -75,7 +75,7 @@ class AnnonceController extends Controller
         }
     }
 
-    public function active($id)
+    public function active($id, AnnonceRequest $annonceRequest)
     {
         try{
             $result = $this->annonceRepository->active($id);
@@ -87,7 +87,7 @@ class AnnonceController extends Controller
         }
     }
 
-    public function unactive($id)
+    public function unactive($id, AnnonceRequest $annonceRequest)
     {
         try{
             $result = $this->annonceRepository->unactive($id);

@@ -30,15 +30,15 @@ class BoiteDeReceptionRequest extends BaseRequest
      */
     public function rules()
     {
-        if(request()->routeIs('boite_de_messages.store')){
+        if(request()->routeIs('boite_de_receptions.store')){
             return $this->storeOrUpdate();
-        }elseif(request()->routeIs('boite_de_messages.update') || request()->routeIs('boite_de_messages.show')){
+        }elseif(request()->routeIs('boite_de_receptions.update') || request()->routeIs('boite_de_receptions.show')){
             return ['id' => 'exists:boite_de_receptions,id'];
-        }elseif(request()->routeIs('boite_de_messages.delete')){
+        }elseif(request()->routeIs('boite_de_receptions.delete')){
             return $this->delete();
-        }elseif(request()->routeIs('boite_de_messages.index')){
+        }elseif(request()->routeIs('boite_de_receptions.index')){
             return [];
-        }elseif(request()->routeIs('boite_de_messages.getByFilter')){
+        }elseif(request()->routeIs('boite_de_receptions.getByFilter')){
             return $this->getByFilter();
         }
     }

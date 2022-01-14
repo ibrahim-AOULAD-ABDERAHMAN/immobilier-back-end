@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnnonceController;
 use App\Http\Controllers\AnnonceVisiteurController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BoiteDeReceptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,16 +30,28 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
     // Boite de reception
-    Route::get('/boite_de_messages',            [BoiteDeReceptionController::class, 'index'])->name('boite_de_messages.index');
-    Route::get('/boite_de_message/{id}',        [BoiteDeReceptionController::class, 'show'])->name('boite_de_messages.show');
-    Route::put('/boite_de_messages/{id}',       [BoiteDeReceptionController::class, 'update'])->name('boite_de_messages.update');
-    Route::post('/boite_de_messages-delete',    [BoiteDeReceptionController::class, 'delete'])->name('boite_de_messages.delete');
-    Route::post('/boite_de_messages-filter',    [BoiteDeReceptionController::class, 'getByFilter'])->name('boite_de_messages.getByFilter');
+    Route::get('/boite_de_receptions',            [BoiteDeReceptionController::class, 'index'])->name('boite_de_receptions.index');
+    Route::get('/boite_de_reception/{id}',        [BoiteDeReceptionController::class, 'show'])->name('boite_de_receptions.show');
+    Route::put('/boite_de_receptions/{id}',       [BoiteDeReceptionController::class, 'update'])->name('boite_de_receptions.update');
+    Route::post('/boite_de_receptions-delete',    [BoiteDeReceptionController::class, 'delete'])->name('boite_de_receptions.delete');
+    Route::post('/boite_de_receptions-filter',    [BoiteDeReceptionController::class, 'getByFilter'])->name('boite_de_receptions.getByFilter');
+
+    // Articles
+    Route::get('/article/{id}',                  [ArticleController::class, 'show'])->name('articles.show');
+    Route::post('/articles',                     [ArticleController::class, 'store'])->name('articles.store');
+    Route::post('/articles/{id}',                [ArticleController::class, 'update'])->name('articles.update');
+    Route::delete('/articles/{id}',              [ArticleController::class, 'delete'])->name('articles.delete');
+    Route::post('/articles-filter',              [ArticleController::class, 'getByFilter'])->name('articles.getByFilter');
+    Route::put('/articles-active/{id}',          [ArticleController::class, 'active'])->name('articles.active');
+    Route::put('/articles-unactive/{id}',        [ArticleController::class, 'unactive'])->name('articles.unactive');
 
     // Free routes -----------------------------------------------------------------------------------------------------------
 
     // Boite messages
-    Route::post('/boite_de_messages',           [BoiteDeReceptionController::class, 'store'])->name('boite_de_messages.store');
+    Route::post('/boite_de_receptions',           [BoiteDeReceptionController::class, 'store'])->name('boite_de_receptions.store');
+
+    // Articles
+    Route::get('/articles',                      [ArticleController::class, 'index'])->name('articles.index');
 
     // Annonces visiteurs
     Route::get('/annonces',                     [AnnonceController::class, 'index'])->name('annonces.index');
