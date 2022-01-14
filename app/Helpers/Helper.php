@@ -1,0 +1,32 @@
+<?php
+namespace App\Helpers;
+use Illuminate\Support\Facades\Auth;
+class Helper
+{
+    // // Constants
+    const pagination        = 15;
+    // const INTEGRATOR_ROLE   = 'Integrator';
+    // const ADMIN_ROLE        = 'Admin';
+    // const USER_ROLE         = 'User';
+
+
+    // Functions
+    // public static function isIntegrator()
+    // {
+    //     $user = auth::user();
+    //     return $user->role->role == Helper::INTEGRATOR_ROLE;
+    // }
+
+    // public static function isAdmin()
+    // {
+    //     $user = auth::user();
+    //     return $user->role->role == Helper::ADMIN_ROLE;
+    // }
+
+    // public static function isUser()
+    // {
+    //     $user = auth::user();
+    //     return $user->role->role == Helper::USER_ROLE;
+    // }
+
+}
