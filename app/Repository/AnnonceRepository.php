@@ -112,7 +112,7 @@ class AnnonceRepository implements RepositoryInterface
         $annonce->lien_video        = $data['lien_video'];
         $annonce->titre             = $data['titre'];
         $annonce->description       = $data['description'];
-        // $annonce->update();
+        $annonce->update();
 
         // Images
         if(isset($data['images']) and count($data['images']) > 0 ) //$annonce->images()->delete();
@@ -157,8 +157,8 @@ class AnnonceRepository implements RepositoryInterface
     public function delete($id)
     {
         $annonce = $this->annonce->where('id', $id)->first();
+        $this->annonceServices->deleteAllImages($id, $annonce->images());
         $annonce->delete();
-
         return  $annonce;
     }
 

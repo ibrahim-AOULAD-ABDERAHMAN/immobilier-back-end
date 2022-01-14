@@ -63,11 +63,12 @@ class AnnonceServices
 
     public function deleteAllImages($id_annonce, $list_images)
     {
-        $list_images->delete();
+
         $images = Image::where('id_annonce', $id_annonce)->get();
         foreach($images as $image){
             File::delete(public_path("images/annonces/".$image->image));
         }
+        $list_images->delete();
     }
 
 }
